@@ -5,7 +5,6 @@
 	"description": "HTTP-Suite is a comprehensive package designed for modern web development, offering a unified approach to HTTP communications. It elegantly combines reactive models, streamlined API requests, and efficient data streaming, providing a one-stop solution for all your web communication needs. Whether it's simple API calls or complex data handling, HTTP-Suite makes it intuitive and efficient. Perfect for developers aiming to enhance their web projects with reliability and ease.",
 	"license": "ISC",
 	"template": "template/template.json",
-	"repository": "ht"
 	"languages": {
 		"default": "en",
 		"supported": [

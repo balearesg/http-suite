@@ -13,6 +13,11 @@
 			"es"
 		]
 	},
+	"libraries": {
+		"imports": [
+			"http-suite"
+		]
+	},
 	"modules": {
 		"path": "modules"
 	},
@@ -31,7 +36,6 @@
 	"dependencies": {
 		"@beyond-js/kernel": "~0.1.9",
 		"@beyond-js/react-18-widgets": "~1.0.1",
-		"httpsuite": "^0.0.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"socket.io-client": "^4.5.4"

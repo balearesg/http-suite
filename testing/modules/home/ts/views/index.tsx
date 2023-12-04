@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Api } from 'httpsuite/api';
+import { Api } from 'http-suite/api';
 export /*bundle*/
 function View(): JSX.Element {
 	return (
