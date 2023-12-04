@@ -1,5 +1,4 @@
 import { Events } from '@beyond-js/kernel/core';
-import { ReactiveModel } from '@beyond-js/reactive/model';
 import { JCall } from './jcall';
 export /*bundle*/
 class Api extends Events {

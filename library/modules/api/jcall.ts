@@ -1,6 +1,6 @@
 import { ReactiveModel } from '@beyond-js/reactive/model';
-import { PendingPromise } from '@beyond-js/kernel/core';
 import { Stream } from './stream';
+
 interface headers {
 	'Content-Type': string;
 }
