@@ -102,7 +102,7 @@ class JCall extends ReactiveModel<JCall> {
 
 			if (params.bearer) delete params.bearer;
 
-			if (method === 'post') {
+			if (method === 'post' || method === 'put') {
 				specs.body = this.#processPostParams(params, multipart);
 			} else if (method === 'get') {
 				const queryString: string = this.#processGetParams(params).toString();
@@ -149,5 +149,5 @@ class JCall extends ReactiveModel<JCall> {
 		headers: headers = {
 			'Content-Type': 'application/json',
 		}
-	) => this.execute(url, 'PUT', params, headers);
+	) => this.execute(url, 'put', params, headers);
 }
