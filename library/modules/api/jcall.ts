@@ -6,7 +6,7 @@ interface headers {
 }
 
 export /*bundle*/
-class JCall extends ReactiveModel<JCall> {
+	class JCall extends ReactiveModel<JCall> {
 	get actions() {
 		return this.#streamer.actions;
 	}
@@ -58,8 +58,12 @@ class JCall extends ReactiveModel<JCall> {
 		return this.#formData;
 	};
 
-	#processGetParams(params: Record<string, string>): URLSearchParams | string {
-		const emptyParams: boolean = Object.entries(params).length === 0 && params.constructor === Object;
+	#processGetParams(
+		params: Record<string, string>
+	): URLSearchParams | string {
+		const emptyParams: boolean =
+			Object.entries(params).length === 0 &&
+			params.constructor === Object;
 		if (emptyParams) return '';
 		const parameters: URLSearchParams = new URLSearchParams();
 		for (const key in params) {
@@ -71,7 +75,9 @@ class JCall extends ReactiveModel<JCall> {
 	}
 
 	#processPostParams = (params, multipart): FormData | string => {
-		const emptyParams: boolean = Object.entries(params).length === 0 && params.constructor === Object;
+		const emptyParams: boolean =
+			Object.entries(params).length === 0 &&
+			params.constructor === Object;
 		if (emptyParams) return;
 
 		if (multipart) {
@@ -94,7 +100,10 @@ class JCall extends ReactiveModel<JCall> {
 				headersSpecs = {};
 			}
 			const multipart = params.multipart;
-			let headers = this.getHeaders({ ...headersSpecs, bearer: params.bearer }, multipart);
+			let headers = this.getHeaders(
+				{ ...headersSpecs, bearer: params.bearer },
+				multipart
+			);
 			delete params.multipart;
 			delete params.bearer;
 
@@ -102,10 +111,11 @@ class JCall extends ReactiveModel<JCall> {
 
 			if (params.bearer) delete params.bearer;
 
-			if (method === 'post' || method === 'put') {
+			if (method === 'post' || method === 'put' || method === 'DELETE') {
 				specs.body = this.#processPostParams(params, multipart);
 			} else if (method === 'get') {
-				const queryString: string = this.#processGetParams(params).toString();
+				const queryString: string =
+					this.#processGetParams(params).toString();
 				if (queryString) url += `?${queryString}`;
 			}
 
@@ -142,7 +152,10 @@ class JCall extends ReactiveModel<JCall> {
 		headers: headers = {
 			'Content-Type': 'application/json',
 		}
-	) => this.execute(url, 'DELETE', params, headers);
+	) => {
+		console.log(5555555, params)
+		this.execute(url, 'DELETE', params, headers);
+	};
 	put = (
 		url: string,
 		params: object,
