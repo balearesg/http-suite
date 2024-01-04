@@ -153,7 +153,6 @@ export /*bundle*/
 			'Content-Type': 'application/json',
 		}
 	) => {
-		console.log(5555555, params)
 		this.execute(url, 'DELETE', params, headers);
 	};
 	put = (
