@@ -51,7 +51,7 @@ class Api extends Events {
 	put(route: string, specs: object): Promise<any> {
 		return this.action('put', route, specs);
 	}
-	delete(route: string, specs: object): Promise<any> {
+	delete(route: string, specs?: object): Promise<any> {
 		return this.action('delete', route, specs);
 	}
 
