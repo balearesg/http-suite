@@ -39,7 +39,6 @@ export class Stream {
 		try {
 			this.#metadata.parsed.value = JSON.parse(metadata.value);
 		} catch (exc) {
-			console.log(metadata);
 			console.error(exc);
 			this.#metadata.parsed.error = 'Error parsing metadata';
 		}
