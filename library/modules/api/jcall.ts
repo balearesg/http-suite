@@ -112,7 +112,13 @@ class JCall extends ReactiveModel<JCall> {
 			if (stream) return this.#streamer.execute(url, specs);
 
 			const response: Response = await fetch(url, specs);
-			return response.json();
+			const contentType = response.headers.get('Content-Type');
+
+			if (contentType && contentType.includes('application/json')) {
+				return response.json();
+			} else {
+				return response.blob();
+			}
 		} catch (e) {
 			console.error('error jcall', e);
 		}
