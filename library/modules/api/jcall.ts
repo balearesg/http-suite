@@ -133,7 +133,7 @@ class JCall extends ReactiveModel<JCall> {
 	) => this.execute(url, 'post', params, headers, true);
 
 	get = (url: string, params: object, headers: object) => {
-		return this.execute(url, 'get', params);
+		return this.execute(url, 'get', params, headers);
 	};
 	post = (
 		url: string,
