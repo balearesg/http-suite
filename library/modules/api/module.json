@@ -1,6 +1,6 @@
 {
 	"name": "api",
 	"bundle": "ts",
-	"platforms": ["browser", "web", "ios", "android"],
+	"platforms": ["browser", "web", "ios", "android", "backend", "node"],
 	"files": "*"
 }
