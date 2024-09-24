@@ -1,12 +1,12 @@
 import { ReactiveModel } from '@beyond-js/reactive/model';
 import { Stream } from './stream';
 
-interface headers {
+interface headers extends Record<string, string> {
 	'Content-Type': string;
 }
 
 export /*bundle*/
-	class JCall extends ReactiveModel<JCall> {
+class JCall extends ReactiveModel<JCall> {
 	get actions() {
 		return this.#streamer.actions;
 	}
@@ -58,12 +58,8 @@ export /*bundle*/
 		return this.#formData;
 	};
 
-	#processGetParams(
-		params: Record<string, string>
-	): URLSearchParams | string {
-		const emptyParams: boolean =
-			Object.entries(params).length === 0 &&
-			params.constructor === Object;
+	#processGetParams(params: Record<string, string>): URLSearchParams | string {
+		const emptyParams: boolean = Object.entries(params).length === 0 && params.constructor === Object;
 		if (emptyParams) return '';
 		const parameters: URLSearchParams = new URLSearchParams();
 		for (const key in params) {
@@ -75,9 +71,7 @@ export /*bundle*/
 	}
 
 	#processPostParams = (params, multipart): FormData | string => {
-		const emptyParams: boolean =
-			Object.entries(params).length === 0 &&
-			params.constructor === Object;
+		const emptyParams: boolean = Object.entries(params).length === 0 && params.constructor === Object;
 		if (emptyParams) return;
 
 		if (multipart) {
@@ -100,10 +94,7 @@ export /*bundle*/
 				headersSpecs = {};
 			}
 			const multipart = params.multipart;
-			let headers = this.getHeaders(
-				{ ...headersSpecs, bearer: params.bearer },
-				multipart
-			);
+			let headers = this.getHeaders({ ...headersSpecs, bearer: params.bearer }, multipart);
 			delete params.multipart;
 			delete params.bearer;
 
@@ -114,15 +105,20 @@ export /*bundle*/
 			if (method === 'post' || method === 'put' || method === 'DELETE') {
 				specs.body = this.#processPostParams(params, multipart);
 			} else if (method === 'get') {
-				const queryString: string =
-					this.#processGetParams(params).toString();
+				const queryString: string = this.#processGetParams(params).toString();
 				if (queryString) url += `?${queryString}`;
 			}
 
 			if (stream) return this.#streamer.execute(url, specs);
 
 			const response: Response = await fetch(url, specs);
-			return response.json();
+			const contentType = response.headers.get('Content-Type');
+
+			if (contentType && contentType.includes('application/json')) {
+				return response.json();
+			} else {
+				return response.blob();
+			}
 		} catch (e) {
 			console.error('error jcall', e);
 		}
