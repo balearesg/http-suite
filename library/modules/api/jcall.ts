@@ -1,12 +1,11 @@
-import { ReactiveModel } from '@beyond-js/reactive/model';
-import { Stream } from './stream';
+import {Stream} from "./stream";
 
-interface headers extends Record<string, string> {
-	'Content-Type': string;
+interface IHeaders extends Record<string, string> {
+	"Content-Type": string;
 }
 
 export /*bundle*/
-class JCall extends ReactiveModel<JCall> {
+class JCall {
 	get actions() {
 		return this.#streamer.actions;
 	}
@@ -21,7 +20,6 @@ class JCall extends ReactiveModel<JCall> {
 	}
 	#streamer: Stream;
 	constructor() {
-		super();
 		this.#streamer = new Stream(this);
 	}
 
@@ -31,19 +29,17 @@ class JCall extends ReactiveModel<JCall> {
 		const bearer = specs.bearer || this.#bearer;
 
 		if (bearer) {
-			headers.append('Authorization', `Bearer ${bearer}`);
+			headers.append("Authorization", `Bearer ${bearer}`);
 		}
 		if (specs.bearer) delete specs.bearer;
 
 		const keys: string[] = Object.keys(specs);
 		keys.forEach((key: string): void => {
-			if (key === 'bearer') return;
+			if (key === "bearer") return;
 			headers.append(key, specs[key]);
 		});
 
-		if (multipart) {
-			headers.delete('Content-Type');
-		}
+		if (multipart) headers.delete("Content-Type");
 
 		return headers;
 	};
@@ -60,10 +56,10 @@ class JCall extends ReactiveModel<JCall> {
 
 	#processGetParams(params: Record<string, string>): URLSearchParams | string {
 		const emptyParams: boolean = Object.entries(params).length === 0 && params.constructor === Object;
-		if (emptyParams) return '';
+		if (emptyParams) return "";
 		const parameters: URLSearchParams = new URLSearchParams();
 		for (const key in params) {
-			if (![NaN, undefined, ''].includes(params[key])) {
+			if (![NaN, undefined, ""].includes(params[key])) {
 				parameters.append(key, params[key]);
 			}
 		}
@@ -83,7 +79,7 @@ class JCall extends ReactiveModel<JCall> {
 	};
 	execute = async (
 		url: string,
-		method: string = 'get',
+		method: string = "get",
 		params: Record<string, any> = {},
 		headersSpecs?: object,
 		stream?: boolean,
@@ -94,17 +90,17 @@ class JCall extends ReactiveModel<JCall> {
 				headersSpecs = {};
 			}
 			const multipart = params.multipart;
-			let headers = this.getHeaders({ ...headersSpecs, bearer: params.bearer }, multipart);
+			let headers = this.getHeaders({...headersSpecs, bearer: params.bearer}, multipart);
 			delete params.multipart;
 			delete params.bearer;
 
-			const specs: RequestInit = { method, headers, mode: 'cors' };
+			const specs: RequestInit = {method, headers, mode: "cors"};
 
 			if (params.bearer) delete params.bearer;
 
-			if (method === 'post' || method === 'put' || method === 'DELETE') {
+			if (method === "post" || method === "put" || method === "DELETE") {
 				specs.body = this.#processPostParams(params, multipart);
-			} else if (method === 'get') {
+			} else if (method === "get") {
 				const queryString: string = this.#processGetParams(params).toString();
 				if (queryString) url += `?${queryString}`;
 			}
@@ -112,50 +108,50 @@ class JCall extends ReactiveModel<JCall> {
 			if (stream) return this.#streamer.execute(url, specs);
 
 			const response: Response = await fetch(url, specs);
-			const contentType = response.headers.get('Content-Type');
+			const contentType = response.headers.get("Content-Type");
 
-			if (contentType && contentType.includes('application/json')) {
+			if (contentType && contentType.includes("application/json")) {
 				return response.json();
 			} else {
 				return response.blob();
 			}
 		} catch (e) {
-			console.error('error jcall', e);
+			console.error("error jcall", e);
 		}
 	};
 
 	stream = (
 		url: string,
 		params: object,
-		headers: headers = {
-			'Content-Type': 'application/json',
+		headers: IHeaders = {
+			"Content-Type": "application/json",
 		}
-	) => this.execute(url, 'post', params, headers, true);
+	) => this.execute(url, "post", params, headers, true);
 
 	get = (url: string, params: object, headers: object) => {
-		return this.execute(url, 'get', params, headers);
+		return this.execute(url, "get", params, headers);
 	};
 	post = (
 		url: string,
 		params: object,
-		headers: headers = {
-			'Content-Type': 'application/json',
+		headers: IHeaders = {
+			"Content-Type": "application/json",
 		}
-	) => this.execute(url, 'post', params, headers);
+	) => this.execute(url, "post", params, headers);
 	delete = (
 		url: string,
 		params: object,
-		headers: headers = {
-			'Content-Type': 'application/json',
+		headers: IHeaders = {
+			"Content-Type": "application/json",
 		}
 	) => {
-		this.execute(url, 'DELETE', params, headers);
+		this.execute(url, "DELETE", params, headers);
 	};
 	put = (
 		url: string,
 		params: object,
-		headers: headers = {
-			'Content-Type': 'application/json',
+		headers: IHeaders = {
+			"Content-Type": "application/json",
 		}
-	) => this.execute(url, 'put', params, headers);
+	) => this.execute(url, "put", params, headers);
 }
