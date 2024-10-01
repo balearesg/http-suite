@@ -1,6 +1,6 @@
 import {Stream} from "./stream";
 
-interface IHeaders extends Record<string, string> {
+interface headers extends Record<string, string> {
 	"Content-Type": string;
 }
 
@@ -39,7 +39,9 @@ class JCall {
 			headers.append(key, specs[key]);
 		});
 
-		if (multipart) headers.delete("Content-Type");
+		if (multipart) {
+			headers.delete("Content-Type");
+		}
 
 		return headers;
 	};
@@ -123,7 +125,7 @@ class JCall {
 	stream = (
 		url: string,
 		params: object,
-		headers: IHeaders = {
+		headers: headers = {
 			"Content-Type": "application/json",
 		}
 	) => this.execute(url, "post", params, headers, true);
@@ -134,14 +136,14 @@ class JCall {
 	post = (
 		url: string,
 		params: object,
-		headers: IHeaders = {
+		headers: headers = {
 			"Content-Type": "application/json",
 		}
 	) => this.execute(url, "post", params, headers);
 	delete = (
 		url: string,
 		params: object,
-		headers: IHeaders = {
+		headers: headers = {
 			"Content-Type": "application/json",
 		}
 	) => {
@@ -150,7 +152,7 @@ class JCall {
 	put = (
 		url: string,
 		params: object,
-		headers: IHeaders = {
+		headers: headers = {
 			"Content-Type": "application/json",
 		}
 	) => this.execute(url, "put", params, headers);
