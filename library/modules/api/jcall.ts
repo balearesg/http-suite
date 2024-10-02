@@ -12,19 +12,22 @@ class JCall {
 	get streamResponse() {
 		return this.#streamer.response;
 	}
+	get metadata() {
+		return this.#streamer.metadata;
+	}
 
 	#bearer;
 	bearer(bearer: string | undefined) {
 		if (bearer) this.#bearer = bearer;
 		return this;
 	}
-	#streamer: Stream;
+	#streamer;
 	constructor() {
 		this.#streamer = new Stream(this);
 	}
 
-	getHeaders = (specs: any, multipart): Headers => {
-		let headers: Headers = new Headers();
+	getHeaders = (specs: any, multipart: any) => {
+		let headers = new Headers();
 
 		const bearer = specs.bearer || this.#bearer;
 
@@ -47,7 +50,7 @@ class JCall {
 	};
 
 	#formData: FormData;
-	formData = (specs: Record<string, any>): FormData => {
+	formData = (specs: Record<string, any>) => {
 		this.#formData = new FormData();
 		const keys: string[] = Object.keys(specs);
 		keys.forEach((key: string): void => {
@@ -57,9 +60,9 @@ class JCall {
 	};
 
 	#processGetParams(params: Record<string, string>): URLSearchParams | string {
-		const emptyParams: boolean = Object.entries(params).length === 0 && params.constructor === Object;
+		const emptyParams = Object.entries(params).length === 0 && params.constructor === Object;
 		if (emptyParams) return "";
-		const parameters: URLSearchParams = new URLSearchParams();
+		const parameters = new URLSearchParams();
 		for (const key in params) {
 			if (![NaN, undefined, ""].includes(params[key])) {
 				parameters.append(key, params[key]);
@@ -68,7 +71,7 @@ class JCall {
 		return parameters;
 	}
 
-	#processPostParams = (params, multipart): FormData | string => {
+	#processPostParams = (params, multipart) => {
 		const emptyParams: boolean = Object.entries(params).length === 0 && params.constructor === Object;
 		if (emptyParams) return;
 
@@ -109,7 +112,7 @@ class JCall {
 
 			if (stream) return this.#streamer.execute(url, specs);
 
-			const response: Response = await fetch(url, specs);
+			const response = await fetch(url, specs);
 			const contentType = response.headers.get("Content-Type");
 
 			if (contentType && contentType.includes("application/json")) {

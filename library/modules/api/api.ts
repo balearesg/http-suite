@@ -1,10 +1,10 @@
-import { Events } from '@beyond-js/kernel/core';
-import { JCall } from './jcall';
+import {Events} from "@beyond-js/kernel/core";
+import {JCall} from "./jcall";
 export /*bundle*/
 class Api extends Events {
 	#url;
 	get url() {
-		return this.#url ?? '';
+		return this.#url ?? "";
 	}
 	#fetcher: JCall;
 
@@ -18,18 +18,18 @@ class Api extends Events {
 	get metadata() {
 		return this.#fetcher.metadata;
 	}
-	constructor(url) {
+	constructor(url: string) {
 		super();
 		this.#url = url;
 		this.#fetcher = new JCall();
-		this.#fetcher.on('action.received', () => this.trigger('action.received'));
-		this.#fetcher.on('stream.response', this.#getResponse);
+		this.on("action.received", () => this.trigger("action.received"));
+		this.on("stream.response", this.#getResponse);
 	}
 
 	#getResponse = () => {
-		this.trigger('stream.response');
+		this.trigger("stream.response");
 	};
-	async action(method = 'get', route: string, specs: object = {}, header?: Record<string, string>): Promise<any> {
+	async action(method = "get", route: string, specs: object = {}, header?: Record<string, string>): Promise<any> {
 		return this.#fetcher[method](this.getURL(route), specs, header);
 	}
 
@@ -42,20 +42,20 @@ class Api extends Events {
 		return this;
 	}
 	get(route: string, specs?: object, header?: Record<string, string>): Promise<any> {
-		return this.action('get', route, specs, header);
+		return this.action("get", route, specs, header);
 	}
 
 	post(route: string, specs: object, header?: Record<string, string>): Promise<any> {
-		return this.action('post', route, specs, header);
+		return this.action("post", route, specs, header);
 	}
 	put(route: string, specs: object, header?: Record<string, string>): Promise<any> {
-		return this.action('put', route, specs, header);
+		return this.action("put", route, specs, header);
 	}
 	delete(route: string, specs?: object, header?: Record<string, string>): Promise<any> {
-		return this.action('delete', route, specs, header);
+		return this.action("delete", route, specs, header);
 	}
 
 	stream(route: string, specs: object = {}): Promise<any> {
-		return this.action('stream', route, specs);
+		return this.action("stream", route, specs);
 	}
 }

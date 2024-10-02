@@ -3,6 +3,7 @@
 		"module": "es2020",
 		"target": "es2018",
 		"types": ["node"],
+		"skipLibCheck": true,
 		"moduleResolution": "Node"
 	}
 }
